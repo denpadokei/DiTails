@@ -4,7 +4,6 @@ using IPA.Loader;
 using SiraUtil.Logging;
 using SiraUtil.Zenject;
 using System;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Zenject;
