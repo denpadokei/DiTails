@@ -18,75 +18,80 @@ namespace DiTails
 
         internal LevelDataService(SiraLog siraLog, IPlatformUserModel platformUserModel, UBinder<Plugin, PluginMetadata> metadataBinder)
         {
-            _siraLog = siraLog;
-            _platformUserModel = platformUserModel;
-            _beatSaver = new BeatSaver("DiTails", Version.Parse(metadataBinder.Value.HVersion.ToString()));
+            this._siraLog = siraLog;
+            this._platformUserModel = platformUserModel;
+            this._beatSaver = new BeatSaver("DiTails", Version.Parse(metadataBinder.Value.HVersion.ToString()));
         }
 
         public void LateDispose()
         {
-            _beatSaver.Clear();
-            _beatSaver.Dispose();
+            this._beatSaver.Clear();
+            this._beatSaver.Dispose();
         }
 
         internal async Task<Beatmap?> GetBeatmap(IDifficultyBeatmap difficultyBeatmap, CancellationToken token)
         {
-            if (!difficultyBeatmap.level.levelID.Contains("custom_level_"))
-            {
+            if (!difficultyBeatmap.level.levelID.Contains("custom_level_")) {
                 return null;
             }
             var hash = difficultyBeatmap.level.levelID.Replace("custom_level_", "");
-            var beatmap = await _beatSaver.BeatmapByHash(hash, token);
+            var beatmap = await this._beatSaver.BeatmapByHash(hash, token);
             return beatmap ?? null;
         }
 
         internal async Task<Beatmap> Vote(Beatmap beatmap, bool upvote, CancellationToken token)
         {
-            try
-            {
-                bool steam = false;
-                if (_platformUserModel is SteamPlatformUserModel)
-                {
+            try {
+                var steam = false;
+                var steamPlatformUserModelType = this.GetSteamUserModelType();
+                var oculusPlatformUserModel = this.GetOculusUserModelType();
+                if (steamPlatformUserModelType != null && this._platformUserModel.GetType() == steamPlatformUserModelType) {
                     steam = true;
                 }
-                else if (!(_platformUserModel is OculusPlatformUserModel))
-                {
-                    _siraLog.Debug("Current platform cannot vote.");
+                else if (oculusPlatformUserModel != null && this._platformUserModel.GetType() == oculusPlatformUserModel) {
+                    steam = false;
+                }
+                else {
+                    this._siraLog.Debug("Current platform cannot vote.");
                     return beatmap;
                 }
-
-                var info = await _platformUserModel.GetUserInfo();
-                var authToken = await _platformUserModel.GetUserAuthToken();
+                var info = await this._platformUserModel.GetUserInfo();
+                var authToken = await this._platformUserModel.GetUserAuthToken();
                 var ticket = authToken.token;
 
-                _siraLog.Debug("Starting Vote...");
-                if (steam)
-                {
-                    ticket = ticket.Replace("-", "");
-                }
-                else
-                {
-                    ticket = authToken.token;
-                }
+                this._siraLog.Debug("Starting Vote...");
+                ticket = steam ? ticket.Replace("-", "") : authToken.token;
 
                 var response = await beatmap.LatestVersion.Vote(upvote ? BeatSaverSharp.Models.Vote.Type.Upvote : BeatSaverSharp.Models.Vote.Type.Downvote,
                     steam ? BeatSaverSharp.Models.Vote.Platform.Steam : BeatSaverSharp.Models.Vote.Platform.Oculus,
                     info.platformUserId,
                     ticket, token);
 
-                _siraLog.Info(response.Successful);
-                _siraLog.Info(response.Error ?? "good");
-                if (response.Successful)
-                {
+                this._siraLog.Info(response.Successful);
+                this._siraLog.Info(response.Error ?? "good");
+                if (response.Successful) {
                     await beatmap.Refresh();
                 }
-                _siraLog.Debug($"Voted. Upvote? ({upvote})");
+                this._siraLog.Debug($"Voted. Upvote? ({upvote})");
             }
-            catch (Exception e)
-            {
-                _siraLog.Error(e.Message);
+            catch (Exception e) {
+                this._siraLog.Error(e.Message);
             }
             return beatmap;
+        }
+
+        /// <summary>
+        /// Oculusでは存在しないクラスのため、直接参照するとビルドできない
+        /// </summary>
+        /// <returns></returns>
+        private Type GetSteamUserModelType()
+        {
+            return Type.GetType("SteamPlatformUserModel, Main");
+        }
+
+        private Type GetOculusUserModelType()
+        {
+            return Type.GetType("OculusPlatformUserModel, Main");
         }
     }
 }
