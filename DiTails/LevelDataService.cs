@@ -92,6 +92,10 @@ namespace DiTails
             return beatmap;
         }
 
+        /// <summary>
+        /// Oculusでは存在しないクラスのため、直接参照するとビルドできない
+        /// </summary>
+        /// <returns></returns>
         private Type GetSteamUserModelType()
         {
             return Type.GetType("SteamPlatformUserModel, Main");
