@@ -4,6 +4,7 @@ using IPA.Loader;
 using SiraUtil.Logging;
 using SiraUtil.Zenject;
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Zenject;
@@ -45,20 +46,19 @@ namespace DiTails
             try
             {
                 bool steam = false;
-#if RELEASE_OCULUS
-                if (_platformUserModel is not OculusPlatformUserModel) {
+                var steamPlatformUserModelType = GetSteamUserModelType();
+                var oculusPlatformUserModel = GetOculusUserModelType();
+                if (steamPlatformUserModelType != null && _platformUserModel.GetType() == steamPlatformUserModelType)
+                {
+                    steam  = true;
+                }
+                else if(oculusPlatformUserModel != null && _platformUserModel.GetType() == oculusPlatformUserModel) {
+                    steam = false;
+                }
+                else {
                     _siraLog.Debug("Current platform cannot vote.");
                     return beatmap;
                 }
-#else
-                if (_platformUserModel is SteamPlatformUserModel) {
-                    steam = true;
-                }
-                else if (!(_platformUserModel is OculusPlatformUserModel)) {
-                    _siraLog.Debug("Current platform cannot vote.");
-                    return beatmap;
-                }
-#endif
                 var info = await _platformUserModel.GetUserInfo();
                 var authToken = await _platformUserModel.GetUserAuthToken();
                 var ticket = authToken.token;
@@ -91,6 +91,16 @@ namespace DiTails
                 _siraLog.Error(e.Message);
             }
             return beatmap;
+        }
+
+        private Type GetSteamUserModelType()
+        {
+            return Type.GetType("SteamPlatformUserModel, Main");
+        }
+
+        private Type GetOculusUserModelType()
+        {
+            return Type.GetType("OculusPlatformUserModel, Main");
         }
     }
 }
