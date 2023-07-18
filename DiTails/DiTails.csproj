@@ -15,16 +15,13 @@
 		<FileVersion>$(ModVersion)</FileVersion>
 		<InformationalVersion>$(ModVersion)</InformationalVersion>
 		<RootNamespace>DiTails</RootNamespace>
-		<Configurations>Debug;Release;Release_Oculus</Configurations>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<DebugType>full</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<DebugType>pdbonly</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Release_Oculus'">
-	  <DebugType>pdbonly</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
 		<DisableCopyToPlugins>True</DisableCopyToPlugins>
@@ -36,7 +33,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;0649</NoWarn>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Oculus|AnyCPU'" />
 	<ItemGroup>
 		<PackageReference Include="BeatSaberModdingTools.Tasks">
 			<Version>2.0.0-beta7</Version>
