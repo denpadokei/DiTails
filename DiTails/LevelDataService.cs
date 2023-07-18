@@ -45,16 +45,20 @@ namespace DiTails
             try
             {
                 bool steam = false;
-                if (_platformUserModel is SteamPlatformUserModel)
-                {
-                    steam = true;
-                }
-                else if (!(_platformUserModel is OculusPlatformUserModel))
-                {
+#if RELEASE_OCULUS
+                if (_platformUserModel is not OculusPlatformUserModel) {
                     _siraLog.Debug("Current platform cannot vote.");
                     return beatmap;
                 }
-
+#else
+                if (_platformUserModel is SteamPlatformUserModel) {
+                    steam = true;
+                }
+                else if (!(_platformUserModel is OculusPlatformUserModel)) {
+                    _siraLog.Debug("Current platform cannot vote.");
+                    return beatmap;
+                }
+#endif
                 var info = await _platformUserModel.GetUserInfo();
                 var authToken = await _platformUserModel.GetUserAuthToken();
                 var ticket = authToken.token;

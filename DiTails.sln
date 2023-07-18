@@ -1,18 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiTails", "DiTails\DiTails.csproj", "{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiTails", "DiTails\DiTails.csproj", "{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release_Oculus|Any CPU = Release_Oculus|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Release_Oculus|Any CPU.ActiveCfg = Release_Oculus|Any CPU
+		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Release_Oculus|Any CPU.Build.0 = Release_Oculus|Any CPU
 		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1DF1BB4-2A6D-4009-8155-0D20522B0E50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
