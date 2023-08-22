@@ -8,7 +8,7 @@
 
 
 # Click The Cover Art of a song!
-![DiTails-1](https://cdn.project-sira.tech/images/ditails/ditails1.png)
+![image](https://github.com/denpadokei/DiTails/assets/55026301/63389c1a-d5ab-44c3-8fda-3e00a1ef33a4)
 
 # View All The Song Data
-![DiTails-2](https://cdn.project-sira.tech/images/ditails/ditails2.png)
+![image](https://github.com/denpadokei/DiTails/assets/55026301/cf2b119a-137e-4673-8bf4-93da78939b54)
